@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 func main() {
 	fmt.Println("Задача 1. Расчёт стоимости билетов")
@@ -28,4 +31,20 @@ func main() {
 	fmt.Println("Сумма пустого слайса:", sum(numbers))
 	ratings := []float64{8.5, 7.2, 9.0, 6.8, 8.1}
 	fmt.Println("Рейтинги от 7.5:", filterByRating(ratings, 7.5))
+
+	fmt.Println("\nЗадача: Ошибки")
+	user, err := validateUserData(1, "afmwofms")
+
+	var validationErr *ValidationError
+
+	if errors.Is(err, ErrUserNotFound) {
+		fmt.Println("Пользователь не найден")
+	} else if errors.As(err, &validationErr) {
+		fmt.Println("Неверное поле:", validationErr.Field)
+		fmt.Println("Переданное значение:", validationErr.Value)
+	} else if err != nil {
+		fmt.Println("Другая ошибка:", err)
+	} else {
+		fmt.Println("Пользователь:", user)
+	}
 }
